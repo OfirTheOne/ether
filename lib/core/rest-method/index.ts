@@ -19,23 +19,23 @@ function ApiMethodFactory(route: string, method: ApiMethod, validators: (Array<R
     }
 }
 
-export function Post(route: string = '/', validators: (Array<RequestHandler> | RequestHandler) = []) {
-    return ApiMethodFactory(route, 'POST', validators);
+export function Post(route: string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = []) {
+    return ApiMethodFactory(route, 'POST', middlewares);
 }
 
-export function Get(route: string = '/', validators: (Array<RequestHandler> | RequestHandler) = []) {
-    return ApiMethodFactory(route, 'GET', validators);
+export function Get(route: string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = []) {
+    return ApiMethodFactory(route, 'GET', middlewares);
 }
 
-export function Delete(route: string = '/', validators: (Array<RequestHandler> | RequestHandler) = []) {
-    return ApiMethodFactory(route, 'DELETE', validators);
+export function Delete(route: string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = []) {
+    return ApiMethodFactory(route, 'DELETE', middlewares);
 }
 
-export function Put(route: string = '/', validators: (Array<RequestHandler> | RequestHandler) = []) {
-    return ApiMethodFactory(route, 'PUT', validators);
+export function Put(route: string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = []) {
+    return ApiMethodFactory(route, 'PUT', middlewares);
 }
 
-export function All(route: string = '/', validators: (Array<RequestHandler> | RequestHandler) = []) {
-    return ApiMethodFactory(route, 'ALL', validators);
+export function All(route: string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = []) {
+    return ApiMethodFactory(route, 'ALL', middlewares);
 }
 
