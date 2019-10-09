@@ -9,14 +9,10 @@
       "outDir": "./dist",
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
-      "baseUrl": "./",
-      "paths": {
-          "@ether/*": ["lib/*"]
-       },
+      "baseUrl": "./"
    },
    "include": [
-      "lib/**/*.ts",
-      "src/**/*.ts"
+      "lib/**/*.ts"
    ],
    "exclude": [
       "node_modules"
