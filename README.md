@@ -49,51 +49,59 @@ export class UserController {
 
 ### API Methods
 
-`<METHOD>(route: string = '/', validators: (Array<RequestHandler> | RequestHandler) = [])`
+`<METHOD>(route: string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = [])`
 
 <br>
 
 ### Get 
-`Get()`
+`Get(route: string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = [])`
 
-defines a Get method.
+defines a Get method for the provided `route`, where the provided middlewares precede the current handler method.
 
 <br>
 
 ### Post 
-`Post()`
+`Post( : string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = [])`
 
-defines a Post method.
+defines a Post method for the provided `route`, where the provided middlewares precede the current handler method.
 
 <br>
 
 ### Put 
-`Put()`
+`Put(route: string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = [])`
 
-defines a Put method.
+defines a Put method for the provided `route`, where the provided middlewares precede the current handler method.
 
 <br>
 
 ### Delete 
-`Delete()`
+`Delete(route: string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = [])`
 
-defines a Delete method.
+defines a Delete method for the provided `route`, where the provided middlewares precede the current handler method.
 
 <br>
 
 ### All 
-`All()`
+`All(route: string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = [])`
 
-defines a route under all api methods.
+defines a route under all api methods, for the provided `route`, where the provided middlewares precede the current handler method.
 
 <br>
 <br>
 
 ### Guard
-`Guard()`
+`Guard()` 
 
-Gourd represent a middleware on a module level . <br>
-It's basically a class implementing the `IGuard` interface.
+```ts
+interface IGuard {
+    guard(req:Request, res:Response): (boolean | Promise<boolean>);
+} 
+```
+<br>
+
+Gourd represent a middleware on a module level. <br>
+It's basically a class implementing the `IGuard` interface. <br>
+The `guard` method implements the logic of the guard middleware, returning `false` value of throwing an error will lead to an error handler. <br>
 
 ```ts
 import { Guard } from "ether/core";
@@ -109,7 +117,7 @@ export class AuthUserGuard implements IGuard {
                 return false;   
             }
             // ...
-            
+
             return true;
         } catch (error) {
             throw error;
@@ -135,3 +143,34 @@ export class AuthUserGuard implements IGuard {
 <br>
 
 ### Module
+
+`Module(params: Partial<ModuleParameters>)` <br>
+
+```ts
+interface ModuleParameters {
+    path: string;
+    controllers: Array<any>;
+    providers: Array<any>;
+    modules: Array<any>;
+    guards: Array<any>;
+}
+```
+
+<br>
+
+Modules are a way to group together set of code, controllers, providers, middlewares, that have related functionalities and workflow. <br>
+Modules can be plugged into other modules, by doing so, any routes defined in the sub-module, prefixed by the path of the module is plugged into. <br>
+
+```ts
+@Module({
+    path: '/v1/',
+    guards: [
+        AuthUserGuard
+    ],
+    controllers: [
+        UserController, 
+        LogisterController
+    ],
+})
+export class AuthUserModule { }
+```
