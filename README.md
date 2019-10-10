@@ -254,11 +254,16 @@ app.listen(3000);
 
 #### middlewareFactory
 
-`middlewareFactory(handler: RequestHandler, context?: any)`
+`middlewareFactory(handler: RequestHandler, context?: any): () => any`
 
 A function used to create a class-method middleware decorator function, from the provided `handler` function, if a `context` object was provided the `handler` function will be bound to it. <br>
 
 On the following example, using `middlewareFactory`, we're creating a `Log` middleware decorator function, by decorating `postSubject` route with `Log` decorator, the `Log` middleware will precede the `postSubject` route handler, and write the request url and body to the console. <br>
+
+*Note* : <br>
+The middleware decorator function must code before the Rest-Method decorator.
+
+<br>
 
 ```ts
 import { middlewareFactory } from 'ether/core';
@@ -295,5 +300,5 @@ export class AdminSubjectController extends SubjectController {
 }
 ```
 
-<br>
+
 
