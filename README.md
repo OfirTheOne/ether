@@ -10,11 +10,13 @@ Those are the building blocks of an Ether API application.
 
 <br>
 <br>
+<br>
 
 ### Controller
 `Controller(options: {path: string} = { path: '/'})`
 
-Controller represent a class where each class-method defines a route. <br>
+Decorator that marks a class as Controller. 
+a controller is a class where each class-method defines a route. <br>
 (to define a route you must decorate the method with an ApiMethod decorator).
 
 ```ts
@@ -44,49 +46,51 @@ export class UserController {
 ```
 
 <br>
+<hr>
 <br>
 
 
-### API Methods
+### REST Methods
 
 `<METHOD>(route: string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = [])`
 
 <br>
 
-### Get 
+* **Get** <br> 
 `Get(route: string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = [])`
 
-defines a Get method for the provided `route`, where the provided middlewares precede the current handler method.
+    Decorator that marks a class-method as a Get method for the provided `route`, where the provided middlewares precede the current handler method.
 
 <br>
 
-### Post 
+* **Post** <br> 
 `Post( : string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = [])`
 
-defines a Post method for the provided `route`, where the provided middlewares precede the current handler method.
+    Decorator that marks a class-method as a Post method for the provided `route`, where the provided middlewares precede the current handler method.
 
 <br>
 
-### Put 
+* **Put** <br> 
 `Put(route: string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = [])`
 
-defines a Put method for the provided `route`, where the provided middlewares precede the current handler method.
+    Decorator that marks a class-method as a Put method for the provided `route`, where the provided middlewares precede the current handler method.
 
 <br>
 
-### Delete 
+* **Delete** <br>
 `Delete(route: string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = [])`
 
-defines a Delete method for the provided `route`, where the provided middlewares precede the current handler method.
+    defines a Delete method for the provided `route`, where the provided middlewares precede the current handler method.
 
 <br>
 
-### All 
+* **All** <br>
 `All(route: string = '/', middlewares: (Array<RequestHandler> | RequestHandler) = [])`
 
-defines a route under all api methods, for the provided `route`, where the provided middlewares precede the current handler method.
+    Decorator that marks a class-method as a route handler for all api methods, for the provided `route`, where the provided middlewares precede the current handler method.
 
 <br>
+<hr>
 <br>
 
 ### Guard
@@ -99,7 +103,7 @@ interface IGuard {
 ```
 <br>
 
-Gourd represent a middleware on a module level. <br>
+Decorator that marks a class as Gourd.  a gourd is a middleware on a module level. <br>
 It's basically a class implementing the `IGuard` interface. <br>
 The `guard` method implements the logic of the guard middleware, returning `false` value of throwing an error will lead to an error handler. <br>
 
@@ -134,12 +138,14 @@ export class AuthUserGuard implements IGuard {
 ```
 
 <br>
+<hr>
 <br>
 
 ### Provider
 
 
 <br>
+<hr>
 <br>
 
 ### Module
@@ -158,10 +164,16 @@ interface ModuleParameters {
 
 <br>
 
-Modules are a way to group together set of code, controllers, providers, middlewares, that have related functionalities and workflow. <br>
+Modules are a way to group together set of code; controllers, providers, middlewares, that have related functionalities and workflow. <br>
 Modules can be plugged into other modules, by doing so, any routes defined in the sub-module, prefixed by the path of the module is plugged into. <br>
 
 ```ts
+import { Module } from "ether/core";
+import { LogisterController } from './logister/logister.controller';
+import { UserController } from './user/user.controller';
+import { AuthUserGuard } from '../../guards/auth-user.guard';
+
+
 @Module({
     path: '/v1/',
     guards: [
@@ -174,3 +186,8 @@ Modules can be plugged into other modules, by doing so, any routes defined in th
 })
 export class AuthUserModule { }
 ```
+
+<br>
+<hr>
+<br>
+
