@@ -7,7 +7,7 @@
         {
             "identifier": "typescript",
             "type": "typescript",
-            "tsconfig": "tsconfig.json",
+            "tsconfig": "debug-tsconfig.json",
             "problemMatcher": [
                 "$tsc"
             ]

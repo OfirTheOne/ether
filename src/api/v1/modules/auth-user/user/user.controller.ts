@@ -2,6 +2,7 @@
 import { Request, Response, NextFunction } from "express";
 import { UserHandler } from "./user.handler";
 import { Controller, Get, Put, Post } from "../../../../../../lib/core";
+import { TryCatch } from "../../../../../../lib/common/utility";
 
 
 @Controller({ path: '/user' })
@@ -9,7 +10,8 @@ export class UserController {
 
 
 	constructor(private userHandler: UserHandler) {}
-    @Get()
+	@TryCatch((e, next) => next(e))
+	@Get()
     async getUser(req: Request, res: Response, next: NextFunction) {
 
 		try {

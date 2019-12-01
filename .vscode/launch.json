@@ -8,11 +8,11 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/dist/src/server.js",
-            "preLaunchTask": "tsc: build - tsconfig.json",
+            "program": "${workspaceFolder}/dist-local/src/server.js",
+            "preLaunchTask": "tsc: build - debug-tsconfig.json",
             // "preLaunchTask": "build-with-html",
             "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
+                "${workspaceFolder}/dist-local/**/*.js"
             ],
             
         }
