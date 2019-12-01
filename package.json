@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "build-local": "tsc --p debug-tsconfig.json",
     "pack": "npm run build && cp package.json ./dist/package.json && npm pack ./dist",
     "start": "ts-node ./src/server.ts"
   },

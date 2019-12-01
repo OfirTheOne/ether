@@ -15,6 +15,7 @@ export interface ModuleParameters {
 }
 
 export * from './guard';
+export * from './route-wrapper-handler';
 
 export interface Type<T> {
     new(...args: any[]): T;
