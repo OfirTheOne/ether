@@ -6,14 +6,13 @@
        "pretty": true,
        "sourceMap": true,
        "target": "es6",
-       "outDir": "./dist",
+       "outDir": "./dist-prod",
        "experimentalDecorators": true,
        "emitDecoratorMetadata": true,
        "baseUrl": "./",
     },
     "include": [
        "lib/**/*.ts",
-       "src/**/*.ts",
     ],
     "exclude": [
        "node_modules"

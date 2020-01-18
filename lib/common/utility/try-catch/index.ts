@@ -26,7 +26,7 @@ function _tryCatchHandler(errorHandler: ((e: any, next: Function) => void)): Rou
 
     return function(currentRequestHandler, req, res, next) {
         try {
-            currentRequestHandler(req, res, next)
+            currentRequestHandler(req, res, next).catch(e => next(e))
         } catch (error) {
             errorHandler(error, next)
         }

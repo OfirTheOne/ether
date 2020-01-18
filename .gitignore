@@ -1,3 +1,5 @@
 /dist
 /node_modules
-/dist-local
+/dist-prod
+package-lock.json
+.env

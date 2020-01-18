@@ -1,12 +1,12 @@
 {
-  "name": "ether",
+  "name": "@o-galaxy/ether",
   "version": "1.0.0",
   "description": "Rest Api Framework",
-  "main": "index.js",
+  "main": "dist-prod/index.js",
+  "types": "dist-prod/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "build-local": "tsc --p debug-tsconfig.json",
-    "pack": "npm run build && cp package.json ./dist/package.json && npm pack ./dist",
+    "build-dev": "tsc -p tsconfig.json",
+    "build-prod": "tsc -p tsconfig.prod.json",
     "start": "ts-node ./src/server.ts"
   },
   "os": [
@@ -15,26 +15,26 @@
     "win32"
   ],
   "keywords": [
-    "ether", 
-    "Ether", 
-    "REST", 
-    "API", 
+    "ether",
+    "Ether",
+    "REST",
+    "API",
     "express",
     "server",
-    "typescript", 
-    "framework", 
+    "typescript",
+    "framework",
     "decorators"
   ],
   "author": "Ofir .G",
   "license": "ISC",
   "dependencies": {
     "reflect-metadata": "^0.1.13",
-    "ts-node": "^8.4.1",
-    "typescript": "^3.6.3",
     "@types/express": "^4.17.1",
     "express": "^4.17.1"
   },
-  "devDependencies": {    
+  "devDependencies": {
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3",
     "@types/config": "0.0.34",
     "@types/cors": "^2.8.6",
     "@types/dotenv": "^6.1.1",
@@ -43,6 +43,14 @@
     "dotenv": "^8.1.0"
   },
   "files": [
-    "/**"
-  ]
+    "dist-prod/**"
+  ],
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com-OfirTheOne:OfirTheOne/ether.git"
+  }
 }
