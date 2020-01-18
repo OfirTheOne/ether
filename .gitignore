@@ -1,5 +1,5 @@
-/dist
 /node_modules
+/dist
 /dist-prod
 package-lock.json
 .env
