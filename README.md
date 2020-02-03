@@ -1,9 +1,10 @@
 # Ether
+## Open Galaxy - Ether
 
 REST API Framework, module based, each module constructed of - 
 + controller(s) 
 + provider(s) 
-+ gourd(s) 
++ guard(s) 
 + middleware(s)
 
 Those are the building blocks of an Ether API application.
@@ -23,7 +24,7 @@ Those are the building blocks of an Ether API application.
 #### Controller
 `Controller(options: {path: string} = { path: '/'})`
 
-Decorator that marks a class as Controller. <br>
+Decorator that marks a class as a Controller. <br>
 a controller is a class where each class-method defines a route. <br>
 (to define a route you must decorate the class-method with an [Rest-Method decorator](REST-Method)).
 
@@ -111,8 +112,8 @@ interface IGuard {
 ```
 <br>
 
-Decorator that marks a class as Gourd. <br> 
-a gourd is a middleware on a module level. <br>
+Decorator that marks a class as a Guard. <br> 
+a guard is a middleware on a module level. <br>
 It's basically a class implementing the `IGuard` interface. <br>
 The `guard` method implements the logic of the guard middleware, returning `false` value of throwing an error will lead to an error handler. <br>
 
@@ -152,7 +153,33 @@ export class AuthUserGuard implements IGuard {
 
 #### Provider
 
+Decorator that marks a class as a Provider. <br>
+To inject a provider class in another controller / provider / guard class constructor the class must be decorated with `@Provider()`.
 
+
+a provider is a class that ideally do one of :
+* holds the api call's business logic.
+* function as a separation layer between the controller and the db layer. 
+* function as a generic (or not) utility<br>
+
+```ts
+@Provider()
+export class UserProvider {
+
+	public async findAndUpdateUser(uid: string, email: string, payload: any ) {
+		try {
+			const user = await UserModel.findOneAndUpdate(
+				// ...
+			);
+            return user;
+			
+		} catch (error) {
+			throw error;
+		}
+	}
+
+}
+```
 <br>
 <hr>
 <br>
