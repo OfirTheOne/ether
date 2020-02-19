@@ -2,12 +2,13 @@
   "name": "@o-galaxy/ether",
   "version": "1.0.0",
   "description": "Rest Api Framework",
-  "main": "dist-prod/index.js",
-  "types": "dist-prod/index.d.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "build-dev": "tsc -p tsconfig.json",
     "build-prod": "tsc -p tsconfig.prod.json",
-    "start": "ts-node ./src/server.ts"
+    "start": "ts-node ./src/server.ts",
+    "pack": "npm run build-prod && cp package.json ./dist-prod/package.json && npm pack ./dist-prod"
   },
   "os": [
     "darwin",
@@ -44,7 +45,7 @@
     "dotenv": "^8.1.0"
   },
   "files": [
-    "dist-prod/**"
+    "/**"
   ],
   "directories": {
     "lib": "lib",
