@@ -31,7 +31,7 @@ a controller is a class where each class-method defines a route. <br>
 ```ts
 import { Request, Response, NextFunction } from "express";
 import { UserHandler } from "./user.handler";
-import { Controller, Get } from "ether/core";
+import { Controller, Get } from "@o-galaxy/ether/core";
 
 
 @Controller({ path: '/user' })
@@ -118,8 +118,8 @@ It's basically a class implementing the `IGuard` interface. <br>
 The `guard` method implements the logic of the guard middleware, returning `false` value of throwing an error will lead to an error handler. <br>
 
 ```ts
-import { Guard } from "ether/core";
-import { IGuard } from "ether/models";
+import { Guard } from "@o-galaxy/ether/core";
+import { IGuard } from "@o-galaxy/ether/models";
 
 @Guard() 
 export class AuthUserGuard implements IGuard {
@@ -204,7 +204,7 @@ Modules are a way to group together set of code; controllers, providers, middlew
 Modules can be plugged into other modules, by doing so, any routes defined in the sub-module, prefixed by the path of the module is plugged into. <br>
 
 ```ts
-import { Module } from "ether/core";
+import { Module } from "@o-galaxy/ether/core";
 import { LogisterController } from './logister/logister.controller';
 import { UserController } from './user/user.controller';
 import { AuthUserGuard } from '../../guards/auth-user.guard';
@@ -242,7 +242,7 @@ function used to build a router from a `Module` decorated class. <br>
 ```ts
 // -- file:  app.module.ts
 
-import { Module } from "ether/core";
+import { Module } from "@o-galaxy/ether/core";
 import { PublicModule } from "../v1/modules/public/public.module";
 import { AdminModule } from "../v1/modules/admin/admin.module";
 import { AuthUserModule } from "../v1/modules/auth-user/user.module";
@@ -304,7 +304,7 @@ export const Log = middlewareFactory((req, res, next) => {
 
 ```ts
 import { Request, Response, NextFunction } from "express";
-import { Controller, Post } from "ether/core";
+import { Controller, Post } from "@o-galaxy/ether/core";
 import { SubjectController } from "../../public/subject/subject.controller";
 
 import { Log } from "../../..//middlewares";
