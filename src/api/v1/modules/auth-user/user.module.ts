@@ -16,6 +16,9 @@ import { AuthUserGuard } from '../../guards/auth-user.guard';
         UserController, 
         LogisterController
     ],
+    errorHandlers: [
+        (req, res, next) => res.send('not found from /v1')
+    ]
 })
 export class AuthUserModule { }
 

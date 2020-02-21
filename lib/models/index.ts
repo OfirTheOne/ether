@@ -12,6 +12,8 @@ export interface ModuleParameters {
     modules: Array<Ctor<any>>;
     //
     guards: Array<Ctor<any>>;
+
+    errorHandlers: Array<(Function)>//|{path: string, handler: Function})>);
 }
 
 export * from './guard';

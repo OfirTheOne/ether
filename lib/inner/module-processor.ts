@@ -13,6 +13,7 @@ export function moduleProcessor(moduleClass: any) {
         guards = [],
         controllers = [], 
         // providers = [], 
+        errorHandlers = [],
         modules = [], 
     } = params;
 
@@ -24,6 +25,8 @@ export function moduleProcessor(moduleClass: any) {
     router = controllers.reduce((accRouter, controller) => controllerProcessor(accRouter, controller) , router);
     
     router = modules.reduce((accRouter, subModule) => subModuleProcessor(accRouter, subModule), router);
+
+    router = errorHandlers.reduce<Router>((accRouter, errorHandler) => errorHandlerProcessor(accRouter, errorHandler), router);
     
     if(path != undefined && path != "" && typeof path == 'string') {
         router = Router().use(path, router);
@@ -39,3 +42,11 @@ function subModuleProcessor(router: Router, moduleClass: any): Router {
     const moduleRouter = moduleProcessor(moduleClass);
     return router.use(moduleRouter);
 }
+
+
+
+function errorHandlerProcessor(router: Router, errorHandler: any): Router {
+    return Array.isArray(errorHandler) ? 
+        router.use(errorHandler[0], errorHandler[1]) :
+        router.use(errorHandler);
+} 
