@@ -76,12 +76,12 @@ export class ControllerDefContainer {
                 classMethodFunction;
             
             if(classMethodFunction) {
-                const boundClassMethod = classMethodFunction.bind(classContext);
+                const boundClassMethod = requestMethod.bind(classContext);
                 controllerRouter[apiMethod](
                     m.route, 
                     ...m.middlewares, 
                     ...m.validators,
-                    requestMethod 
+                    boundClassMethod 
                 );
             } else {
                 // console.log(classMethodFunction)
