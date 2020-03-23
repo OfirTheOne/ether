@@ -1,8 +1,9 @@
 
 import { ModuleParameters } from "../models";
-import { Router } from "express";
+import { Router, Application, RequestHandler } from "express";
 import { controllerProcessor } from "./controller-processor";
 import { gourdProcessor} from './guard-processor';
+
 
 export function moduleProcessor(moduleClass: any) {
 
@@ -13,6 +14,7 @@ export function moduleProcessor(moduleClass: any) {
         guards = [],
         controllers = [], 
         // providers = [], 
+        using = [],
         errorHandlers = [],
         modules = [], 
     } = params;
@@ -24,6 +26,8 @@ export function moduleProcessor(moduleClass: any) {
     
     router = controllers.reduce((accRouter, controller) => controllerProcessor(accRouter, controller) , router);
     
+    router = using.reduce<Router>((accRouter, usable) => usingProcessor(accRouter, usable) , router);
+
     router = modules.reduce((accRouter, subModule) => subModuleProcessor(accRouter, subModule), router);
 
     router = errorHandlers.reduce<Router>((accRouter, errorHandler) => errorHandlerProcessor(accRouter, errorHandler), router);
@@ -37,6 +41,9 @@ export function moduleProcessor(moduleClass: any) {
     
 }
 
+function usingProcessor(router: Router, usable: (Router | Application | RequestHandler)): Router {
+    return router.use(usable);
+} 
 
 function subModuleProcessor(router: Router, moduleClass: any): Router {
     const moduleRouter = moduleProcessor(moduleClass);
@@ -44,9 +51,9 @@ function subModuleProcessor(router: Router, moduleClass: any): Router {
 }
 
 
-
 function errorHandlerProcessor(router: Router, errorHandler: any): Router {
     return Array.isArray(errorHandler) ? 
         router.use(errorHandler[0], errorHandler[1]) :
         router.use(errorHandler);
 } 
+

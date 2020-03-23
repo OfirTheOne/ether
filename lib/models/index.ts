@@ -1,3 +1,5 @@
+import { Router, Application, RequestHandler, ErrorRequestHandler } from 'express';
+
 export type Ctor<T=any> = new(...args:any[]) => T;
 
 
@@ -13,7 +15,9 @@ export interface ModuleParameters {
     //
     guards: Array<Ctor<any>>;
 
-    errorHandlers: Array<(Function)>//|{path: string, handler: Function})>);
+    using: Array<(Router | Application | RequestHandler)>
+
+    errorHandlers: Array<ErrorRequestHandler>//|{path: string, handler: Function})>);
 }
 
 export * from './guard';
