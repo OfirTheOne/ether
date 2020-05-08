@@ -4,6 +4,7 @@ import { GuardFn } from "../models/guard";
 import { RouteWrapperHandler } from '../models/route-wrapper-handler';
 
 import { wrapperApplier } from './../common/factory/route-wrapper'
+import { Ctor } from "../models";
 
 export interface ControllerMethodDefinition { 
     route: string, 
@@ -18,6 +19,7 @@ export type ApiMethod = 'POST'|'GET'|'PUT'|'DELETE'|'PATCH'|'ALL';
 export class ControllerDefContainer {
 
     gourds: Array<GuardFn>
+    extendsControllers: Array<Ctor> = []
     methodDefinitionsMap = new Map<string, ControllerMethodDefinition>()
     path: string = '/';
 
@@ -55,7 +57,9 @@ export class ControllerDefContainer {
             }
         );
     }
-
+    public setExtendsControllers(extendsControllers: Array<Ctor>) {
+        this.extendsControllers.push(...extendsControllers);
+    }
 
     private applyWrappers(originMethod: Function, wrappers: Array<RouteWrapperHandler>) {
         return wrappers.reduce((origin, wrapper) => {
@@ -90,5 +94,12 @@ export class ControllerDefContainer {
         return router.use(this.path, controllerRouter);
     }
 
+    public static extractControllerDefContainer(controller: Ctor): ControllerDefContainer {
+        return controller.prototype['$router_def']
+    } 
+
+    public static insertControllerDefContainer(controller: Ctor, defContainer: ControllerDefContainer): void {
+        controller.prototype['$router_def'] = defContainer; 
+    } 
 
 }
