@@ -1,4 +1,5 @@
 import { Ctor } from "./type-utils";
+import { Application, Router, RequestHandler } from "express";
 
 export interface ModuleParameters {
     // pre path for the entire module
@@ -12,5 +13,6 @@ export interface ModuleParameters {
     //
     guards: Array<Ctor<any>>;
 
+    using: Array<Application|RequestHandler|Router>
     errorHandlers: Array<(Function)>//|{path: string, handler: Function})>);
 }
