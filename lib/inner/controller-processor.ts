@@ -6,9 +6,16 @@ import { Injector } from './di/injector';
 const injector = Injector.create();
 
 export function controllerProcessor(router: Router, Controller: Ctor<any>): Router {
-    let controllerDef: ControllerDefContainer = Controller.prototype['$router_def'];
-    // const controllerInstance = new Controller();
+    let controllerDef: ControllerDefContainer = ControllerDefContainer.extractControllerDefContainer(Controller);
+
+    const { extendsControllers } = controllerDef;
+
+    for(let extendsController of extendsControllers) {
+        controllerProcessor(router, extendsController);
+    }
+
     const controllerInstance = injector.resolve(Controller);
+
     controllerDef.initRouter(router, controllerInstance);
     return router;
 }

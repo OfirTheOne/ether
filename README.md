@@ -330,9 +330,18 @@ export class AdminSubjectController extends SubjectController {
 
 ### TODO
 
+#### Argent
+* add feature of extends from controllers from options                          Done
+* validate the type of object provided on each field in Module decorator.
+* add default path to @Module.
+* add default path to @Controller.
+* wrap app with an object composed by application-stages.
+
+#### Helpful
+* warning for path not starting with '/'.
 * system error table - describable errors.
 * add better errors for injecting non provider classes.
 * support passing router options to controller.
 * support using guard as decorator on module level.
-* defaultize body / params - spec solution or use middlewares (with example).
+* defaulting body / params - spec solution or use middlewares (with example).
 * abstract / hide the (req, res, next) signature, spec for inject body, params, query, etc..

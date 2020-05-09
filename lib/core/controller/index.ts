@@ -1,19 +1,26 @@
 import { ControllerDefContainer } from "../../inner/controller-def-container";
-import { Ctor } from "../../models";
+import { metaTypeKey, MetaType } from '../../inner/meta-types'
+import { Ctor, ControllerOptions } from "../../models";
 
 
-export function Controller(options: {path: string} = { path: '/'}) {
+
+export const defaultControllerOptionsFactory = (): ControllerOptions => ({ path: '/', extends: [] })
+
+
+export function Controller(options: Partial<ControllerOptions> = defaultControllerOptionsFactory()) {
     return <T extends Ctor>(originalConstructor: T) => {
         const original = originalConstructor;
-        original.prototype['$meta.type'] = '@Controller';
+        original.prototype[metaTypeKey] = MetaType.controller;
 
-        let controllerDef: ControllerDefContainer = original.prototype['$router_def'];
+        const mergedOptions = { ...(defaultControllerOptionsFactory()), ...options }
+        let controllerDef: ControllerDefContainer = ControllerDefContainer.extractControllerDefContainer(original);
 
         if(controllerDef == undefined) {
-            original.prototype['$router_def'] = new ControllerDefContainer();
-            controllerDef = original.prototype['$router_def'];
+            ControllerDefContainer.insertControllerDefContainer(original, new ControllerDefContainer())
+            controllerDef = ControllerDefContainer.extractControllerDefContainer(original);
         } 
-        controllerDef.setPath(options.path);
+        controllerDef.setPath(mergedOptions.path);
+        controllerDef.setExtendsControllers(mergedOptions.extends)
 
         return original;
     }
