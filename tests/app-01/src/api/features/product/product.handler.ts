@@ -3,17 +3,18 @@ import { Provider } from '@o-galaxy/ether/core';
 import { DBRepository } from '../../common/services/db-repository.service';
 
 @Provider()
-export class ProductAdminHandler {
+export class ProductHandler {
 
 
     constructor(
         private bdRepository: DBRepository,
     ) {}
     
-    public async createProduct(product: any) {
+    public async getProduct() {
         try {
-            await this.bdRepository.create(product);
-            return product 
+            return ({
+                name: "product A"
+            })
             
         } catch (error) {
             throw error;
