@@ -1,54 +1,84 @@
-// == 
+import * as env from 'dotenv';
+env.config();
 import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
+
+import "reflect-metadata";
+
+import { AppModule} from '../api/app.module';
+import { Application, AppPipeline } from '@o-galaxy/ether/core';
+import { IAppPipeline } from '@o-galaxy/ether/models/app-pipeline';
 
 
-import { apiRouter } from '../api';
-import { errorMiddleware } from './error-handler';
 
 
-import { bodyParserStage } from './app-stages/body-parser.app-stage';
+@AppPipeline()
+class BodyParserPipe implements IAppPipeline {
+    pipe(app: express.Application): express.Application {
+        
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({ extended: true }));
 
-
-export class App {
-    public app: express.Application;
-    public port: number;
-
-    constructor(port: any) {
-
-        this.app = express();
-        this.port = port;
-        this.initAppUsage();
-
+        return app;
     }
 
-    private initAppUsage() {
+}
 
-        bodyParserStage(this.app)
+@AppPipeline()
+class CorsPipe implements IAppPipeline {
+    pipe(app: express.Application): express.Application {
+        
+        app.use(cors())
 
-        // sessionStoreStage(this.app);
-        this.initializeRoutes();
-        this.app.use(errorMiddleware);
-        this.initFirebase();
-    }
-
-    private initFirebase() {
-
-        // if (process.env.LOCAL_FIREBASE_UID) {
-        //     FirebaseController.getIdToken(process.env.LOCAL_FIREBASE_UID);
-        // }
-    }
-
-
-    private initializeRoutes() {
-        this.app.use('/api/', apiRouter);
-    }
-
-    public listen() {
-        this.app.listen(this.port, () => {
-            console.log(`App listening on the port ${this.port}`);
+        app.use(function (req: express.Request, res: express.Response, next: express.NextFunction) {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
         });
+        return app;
+    }
+
+}
+
+@AppPipeline()
+class ApiDocsPipe implements IAppPipeline {
+    pipe(app: express.Application): express.Application {
+        
+        app.use('/api/', express.static(__dirname + '/../../webApidoc'));
+
+        return app;
+    }
+
+}
+
+@AppPipeline()
+class ErrorHandlerPipe implements IAppPipeline {
+    pipe(app: express.Application): express.Application {
+        
+        app.use((err, req, res, next) => {
+            res.status(400).send(err);
+        });
+        return app;
     }
 }
 
 
-    
+@Application({
+    pipelines: {
+        onCreate: [
+            BodyParserPipe,
+            ApiDocsPipe,
+            CorsPipe
+        ],
+
+        afterRoutesInit: [
+            ErrorHandlerPipe
+        ]
+    },
+    modules: [
+        AppModule
+    ]
+})
+export class MainApplication { }
+

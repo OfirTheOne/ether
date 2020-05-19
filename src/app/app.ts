@@ -2,75 +2,86 @@ import * as env from 'dotenv';
 env.config();
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
-import * as fs from 'fs';
-import * as path from 'path';
 import * as cors from 'cors';
-import * as config from 'config';
 
 import "reflect-metadata";
 
-import {apiRouter} from '../api/router';
-// import {errorMiddleware} from '../middleware/error';
-
-// import '../db/mongo/init'; // apply connection for mongo
-// import '../db/elastic/init'; // apply connection for elasticsearch
+import { AppModule} from '../api/router/app.module';
+import { Application, AppPipeline } from '../../lib/core';
+import { IAppPipeline } from '../../lib/models/app-pipeline';
 
 
 
-//in order to use firebase a private key should be added to to the environment variables
-export class App {
-    public app: express.Application;
-    public port: number;
 
-    constructor(port: any) {
+@AppPipeline()
+class BodyParserPipe implements IAppPipeline {
+    pipe(app: express.Application): express.Application {
+        
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({ extended: true }));
 
-        this.app = express();
-        this.port = port;
-
-        this.initAppUsage();
-
+        return app;
     }
 
-    private initAppUsage() {
-        this.initializeMiddlewares();
-        this.initializeRoutes();
-        this.initializeErrorHandling();
-    }
+}
 
+@AppPipeline()
+class CorsPipe implements IAppPipeline {
+    pipe(app: express.Application): express.Application {
+        
+        app.use(cors())
 
-
-    private initializeMiddlewares() {
-        this.app.use(bodyParser.json());
-        this.app.use(bodyParser.urlencoded({ extended: true }));
-        this.app.use(cors())
-        this.app.use('/api/', express.static(__dirname + '/../../webApidoc'));
-
-        this.app.use(function (req: express.Request, res: express.Response, next: express.NextFunction) {
+        app.use(function (req: express.Request, res: express.Response, next: express.NextFunction) {
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
             next();
         });
-
-
+        return app;
     }
 
-    private initializeErrorHandling() {
-        this.app.use((err, req, res, next) => {
+}
+
+@AppPipeline()
+class ApiDocsPipe implements IAppPipeline {
+    pipe(app: express.Application): express.Application {
+        
+        app.use('/api/', express.static(__dirname + '/../../webApidoc'));
+
+        return app;
+    }
+
+}
+
+@AppPipeline()
+class ErrorHandlerPipe implements IAppPipeline {
+    pipe(app: express.Application): express.Application {
+        
+        app.use((err, req, res, next) => {
             res.status(400).send(err);
         });
-    }
-
-
-    private initializeRoutes() {
-        this.app.use('/api/', apiRouter);
-    }
-
-    public listen() {
-        this.app.listen(this.port, () => {
-            console.log(`App listening on the port ${this.port}`);
-            console.log('on NODE_ENV: ' + config.util.getEnv('NODE_ENV'));
-
-        });
+        return app;
     }
 }
+
+
+
+
+
+@Application({
+    pipelines: {
+        onCreate: [
+            BodyParserPipe,
+            ApiDocsPipe,
+            CorsPipe
+        ],
+
+        afterRoutesInit: [
+            ErrorHandlerPipe
+        ]
+    },
+    modules: [
+        AppModule
+    ]
+})
+export class MainApplication { }
 

@@ -1,5 +1,5 @@
 import { ControllerDefContainer } from "../../inner/controller-def-container";
-import { metaTypeKey, MetaType } from '../../inner/meta-types'
+import { metaTypeKey, MetaType } from '../../inner/consts'
 import { Ctor, ControllerOptions } from "../../models";
 
 

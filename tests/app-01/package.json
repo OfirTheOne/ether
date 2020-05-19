@@ -8,12 +8,12 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "ts-node": "^8.4.1",
-    "typescript": "^3.6.3",
-    "@o-galaxy/ether": "file:../o-galaxy-ether-1.1.0.tgz",
     "@types/multer": "^1.4.3",
+    "@o-galaxy/ether": "file:../o-galaxy-ether-1.1.0.tgz",
     "multer": "^1.4.2",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
   },
   "keywords": [],
   "author": "",

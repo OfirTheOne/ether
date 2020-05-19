@@ -1,7 +1,5 @@
-import {App} from './app';
+import { MainApplication } from './app'
+import { buildApp } from '@o-galaxy/ether/common/build-app'
 
-const app = new App(
-    3000,
-);
 
-app.listen();
+export const app = buildApp(MainApplication)
