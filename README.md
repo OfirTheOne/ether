@@ -231,10 +231,10 @@ export class AuthUserModule { }
 
 Decorator that marks a class as an AppPipeline. <br>
 
-Pipeline (AppPipeline) are a way to wrap together logic that generally used to manipulate application configuration, on plugin modules, such ass `cors`, `body-parser`, etc. . <br>
+Pipeline (AppPipeline) are a way to wrap together logic that generally used to manipulate application configuration, on plugin modules, such ass `cors`, `body-parser`, etc. <br>
 Pipeline can be registered on an Application decorated class, on 2 steps :
-- 'onCreate' : right after the application object ins instantiated, (before any other handlers are registered).
-- 'afterRoutesInit' : right after all the other handlers (modules, controllers, guards) are registered to the application object.
+- `onCreate` : right after the (express) application object is instantiated, (before any other handlers are registered).
+- `afterRoutesInit` : right after all the other handlers (modules, controllers, guards) are registered to the application object.
 <br>
 
 ```ts
@@ -273,8 +273,8 @@ Application class are the root object that the entire server is reduce to. <br>
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import { AppModule} from '../api/router/app.module';
-import { Application, AppPipeline } from '../../lib/core';
-import { IAppPipeline } from '../../lib/models/app-pipeline';
+import { Application, AppPipeline } from '@o-galaxy/ether/core';
+import { IAppPipeline } from '@o-galaxy/ether/models';
 
 
 @AppPipeline()
@@ -307,8 +307,9 @@ export class MainApplication { }
 ```
 <br>
 <hr>
+<hr>
 <br>
-<br>
+
 
 
 ### **ether/common**
@@ -341,7 +342,7 @@ export class AppModule { }
 ```ts
 // -- file: index.ts
 
-import { build } from 'ether/common'
+import { build } from '@o-galaxy/ether/common'
 import { AppModule } from './app.module';
 
 export const apiRouter = build(AppModule);
@@ -360,6 +361,38 @@ app.listen(3000);
 <hr>
 <br>
 
+#### buildApp
+
+`buildApp(application: any): express.Application` <br>
+
+function used to build an application from an `Application` decorated class. <br> 
+
+```ts
+import * as express from 'express';
+import { Application } from '@o-galaxy/ether/core';
+import * as bodyParser from 'body-parser';
+import { AppModule} from '../api/router/app.module';
+
+
+@Application({
+    pipelines: {
+        onCreate: [
+            BodyParserPipe,
+        ]
+    },
+    modules: [
+        AppModule
+    ]
+})
+export class MainApplication { }
+
+
+export const app = buildApp(MainApplication)
+```
+
+<br>
+<hr>
+<br>
 
 #### middlewareFactory
 
@@ -375,7 +408,7 @@ The middleware decorator function must code before the Rest-Method decorator.
 <br>
 
 ```ts
-import { middlewareFactory } from 'ether/core';
+import { middlewareFactory } from '@o-galaxy/ether/core';
 
 export const Log = middlewareFactory((req, res, next) => {
     console.log('request url: ' + req.originalUrl);
@@ -408,6 +441,12 @@ export class AdminSubjectController extends SubjectController {
 
 }
 ```
+
+<br>
+<hr>
+<hr>
+<br>
+
 
 
 ### TODO
