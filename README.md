@@ -226,6 +226,88 @@ export class AuthUserModule { }
 <br>
 <hr>
 <br>
+
+#### AppPipeline
+
+Decorator that marks a class as an AppPipeline. <br>
+
+Pipeline (AppPipeline) are a way to wrap together logic that generally used to manipulate application configuration, on plugin modules, such ass `cors`, `body-parser`, etc. . <br>
+Pipeline can be registered on an Application decorated class, on 2 steps :
+- 'onCreate' : right after the application object ins instantiated, (before any other handlers are registered).
+- 'afterRoutesInit' : right after all the other handlers (modules, controllers, guards) are registered to the application object.
+<br>
+
+```ts
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import { AppPipeline } from '@o-galaxy/ether/core';
+import { IAppPipeline } from '@o-galaxy/ether/models';
+
+
+
+@AppPipeline()
+class BodyParserPipe implements IAppPipeline {
+    pipe(app: express.Application): express.Application {
+        
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({ extended: true }));
+
+        return app;
+    }
+
+}
+
+```
+<br>
+<hr>
+<br>
+
+#### Application
+
+Decorator that marks a class as an Application. <br>
+
+Application class are the root object that the entire server is reduce to. <br>
+
+
+```ts
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import { AppModule} from '../api/router/app.module';
+import { Application, AppPipeline } from '../../lib/core';
+import { IAppPipeline } from '../../lib/models/app-pipeline';
+
+
+@AppPipeline()
+class ErrorHandlerPipe implements IAppPipeline {
+    pipe(app: express.Application): express.Application {
+        
+        app.use((err, req, res, next) => {
+            res.status(400).send(err);
+        });
+        return app;
+    }
+}
+
+@Application({
+    pipelines: {
+        onCreate: [
+            BodyParserPipe,
+        ],
+        afterRoutesInit: [
+            ErrorHandlerPipe
+        ]
+    },
+    modules: [
+        AppModule
+    ]
+})
+export class MainApplication { }
+
+
+```
+<br>
+<hr>
+<br>
 <br>
 
 
@@ -331,11 +413,18 @@ export class AdminSubjectController extends SubjectController {
 ### TODO
 
 #### Argent
-* add feature of extends from controllers from options                          Done
+* add feature of extends from controllers from options                          
+    + ✔️ Done
 * validate the type of object provided on each field in Module decorator.
 * add default path to @Module.
+    + ✔️ Done
 * add default path to @Controller.
+    + ✔️ Done
+* support inject provider to guard.
+    + ✔️ Done
 * wrap app with an object composed by application-stages.
+    + ✔️ Done
+* gathering metadata on each controller and module to plot routing map.
 
 #### Helpful
 * warning for path not starting with '/'.
