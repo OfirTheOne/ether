@@ -8,7 +8,7 @@ import { ProductAdminController } from './features/product/product.admin.control
 
 @Module({
 
-    path: '/feature',
+    path: '/api',
     controllers: [
         CategoryAdminController,
         ProductAdminController

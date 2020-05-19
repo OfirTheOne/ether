@@ -1,9 +1,8 @@
-import { App } from '../../app-01/src/app/app';
+import { app } from '../../app-01/src/app/';
 import { expect } from 'chai'
 
 import * as request from 'supertest';
 
-const { app } = new App(3000);
 
 
 
@@ -11,7 +10,7 @@ const { app } = new App(3000);
 describe("Feature : Extends Controllers", function() {
     it("test sub controller api call", function(done) {
         request(app).post(
-            '/api/feature/product/',
+            '/api/product/',
         ).send({
             name: "product A"
         }).end(
@@ -29,7 +28,7 @@ describe("Feature : Extends Controllers", function() {
     
     it("test extended (parent controller) api call", function(done) {
         request(app).get(
-            '/api/feature/product/',
+            '/api/product/',
         ).end(
             (err, req) => {
                 expect(err).to.be.null

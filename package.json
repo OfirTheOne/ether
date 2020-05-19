@@ -7,11 +7,17 @@
   "scripts": {
     "build-dev": "tsc -p tsconfig.json",
     "build-prod": "tsc -p tsconfig.prod.json",
-    "test:osx": "mocha --require ts-node/register tests/**/*.test.ts tests/**/*.test.ts",
-    "test:lin": "mocha --require ts-node/register tests/**/*.test.ts tests/**/*.test.ts",
-    "test": "NODE_ENV=testing&& npm run test:osx",
     "start": "ts-node ./src/server.ts",
-    "pack": "npm run build-prod && cp package.json ./dist-prod/package.json && npm pack ./dist-prod"
+    "test:osx": "mocha --require ts-node/register tests/**/*.test.ts tests/**/*.test.ts",
+    
+    "pack-script": "sh pack-publish-version-test.job.sh",
+    
+    "test": "NODE_ENV=testing&& npm run test:osx",
+    
+    "install:app-01": "cd ./tests/app-01 && npm install",
+    "install:app-02": "cd ./tests/app-02 && npm install",
+    "install:all-app": "npm run install:app-01 && npm run install:app-02"
+    
   },
   "os": [
     "darwin",

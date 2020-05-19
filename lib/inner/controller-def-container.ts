@@ -5,6 +5,7 @@ import { RouteWrapperHandler } from '../models/route-wrapper-handler';
 
 import { wrapperApplier } from './../common/factory/route-wrapper'
 import { Ctor } from "../models";
+import { MetaInput } from "./consts/meta-input";
 
 export interface ControllerMethodDefinition { 
     route: string, 
@@ -95,11 +96,11 @@ export class ControllerDefContainer {
     }
 
     public static extractControllerDefContainer(controller: Ctor): ControllerDefContainer {
-        return controller.prototype['$router_def']
+        return controller.prototype[MetaInput.controller]
     } 
 
     public static insertControllerDefContainer(controller: Ctor, defContainer: ControllerDefContainer): void {
-        controller.prototype['$router_def'] = defContainer; 
+        controller.prototype[MetaInput.controller] = defContainer; 
     } 
 
 }
