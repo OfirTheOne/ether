@@ -1,6 +1,6 @@
 {
   "name": "@o-galaxy/ether",
-  "version": "1.2.0-beta.1",
+  "version": "1.2.1-beta.1",
   "description": "Rest Api Framework",
   "main": "index.js",
   "types": "index.d.ts",
@@ -9,15 +9,11 @@
     "build-prod": "tsc -p tsconfig.prod.json",
     "start": "ts-node ./src/server.ts",
     "test:osx": "mocha --require ts-node/register tests/**/*.test.ts tests/**/*.test.ts",
-    
     "pack-script": "sh pack-publish-version-test.job.sh",
-    
     "test": "NODE_ENV=testing&& npm run test:osx",
-    
     "install:app-01": "cd ./tests/app-01 && npm install",
     "install:app-02": "cd ./tests/app-02 && npm install",
     "install:all-app": "npm run install:app-01 && npm run install:app-02"
-    
   },
   "os": [
     "darwin",
