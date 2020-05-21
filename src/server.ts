@@ -1,7 +1,7 @@
-import {App} from './app';
+import { MainApplication } from './app/app';
+import { serve } from '../lib/common';
 
-const app = new App(
-    3000,
-);
 
-app.listen();
+serve(MainApplication, 3000, () => {
+    console.log("up on 3000")
+});
