@@ -11,15 +11,12 @@ Those are the building blocks of an Ether API application.
 
 <br>
 <br>
-<br>
 
 ## API 
 
-<br>
 
 ### **ether/core**
 
-<br>
 
 #### Controller
 `Controller(options: {path: string} = { path: '/'})`
@@ -110,12 +107,10 @@ interface IGuard {
     guard(req:Request, res:Response): (boolean | Promise<boolean>);
 } 
 ```
-<br>
 
 Decorator that marks a class as a Guard. <br> 
-a guard is a middleware on a module level. <br>
-It's basically a class implementing the `IGuard` interface. <br>
-The `guard` method implements the logic of the guard middleware, returning `false` value of throwing an error will lead to an error handler. <br>
+A guard act as a middleware on a module level and it's basically a class implementing the `IGuard` interface. <br>
+The `guard` method implements the logic of the guard middleware, returning `false` value or throwing an error will lead to any error handling middleware. <br>
 
 ```ts
 import { Guard } from "@o-galaxy/ether/core";
@@ -157,10 +152,10 @@ Decorator that marks a class as a Provider. <br>
 To inject a provider class in another controller / provider / guard class constructor the class must be decorated with `@Provider()`.
 
 
-a provider is a class that ideally do one of :
+A provider is a class that ideally do one of :
 * holds the api call's business logic.
 * function as a separation layer between the controller and the db layer. 
-* function as a generic (or not) utility<br>
+* function as a generic (or not) utility service.<br>
 
 ```ts
 @Provider()
@@ -314,13 +309,84 @@ export class MainApplication { }
 
 ### **ether/common**
 
+#### buildApp
+
+`buildApp(application: any): express.Application` <br>
+
+A function used to build an application from an `Application` decorated class. <br> 
+
+```ts
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import { Application } from '@o-galaxy/ether/core';
+import { AppModule} from '../api/app.module';
+
+...
+
+@Application({
+    pipelines: {
+        onCreate: [
+            BodyParserPipe,
+        ]
+    },
+    modules: [
+        AppModule
+    ]
+})
+export class MainApplication { }
+
+export const app = buildApp(MainApplication)
+```
+
 <br>
+<hr>
+<br>
+
+#### serve
+
+`serve(applicationClass: any, port: number, hostname: string, callback?: (...args: any[]) => void): Application`
+`serve(applicationClass: any, port: number, callback?: (...args: any[]) => void): Application`
+
+A function used to serve an `Application` decorated class (alias to (express) app.listen). <br> 
+
+```ts
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import { Application } from '@o-galaxy/ether/core';
+import { serve } from '@o-galaxy/ether/common';
+import { AppModule} from '../api/app.module';
+
+...
+
+@Application({
+    pipelines: {
+        onCreate: [
+            BodyParserPipe,
+        ]
+    },
+    modules: [
+        AppModule
+    ]
+})
+export class MainApplication { }
+
+const port = 3000;
+
+serve(App, port,() => {
+    console.log(`App listening on the port ${port}`);
+});
+```
+
+<br>
+<hr>
+<br>
+
 
 #### build
 
 `build(module: any): express.Router` <br>
 
-function used to build a router from a `Module` decorated class. <br> 
+A function used to build a router from a `Module` decorated class. <br> 
 
 ```ts
 // -- file:  app.module.ts
@@ -354,40 +420,6 @@ import { apiRouter } from './api/router'
 const app = express();
 app.use('/api/', apiRouter);
 app.listen(3000);
-```
-
-
-<br>
-<hr>
-<br>
-
-#### buildApp
-
-`buildApp(application: any): express.Application` <br>
-
-function used to build an application from an `Application` decorated class. <br> 
-
-```ts
-import * as express from 'express';
-import { Application } from '@o-galaxy/ether/core';
-import * as bodyParser from 'body-parser';
-import { AppModule} from '../api/router/app.module';
-
-
-@Application({
-    pipelines: {
-        onCreate: [
-            BodyParserPipe,
-        ]
-    },
-    modules: [
-        AppModule
-    ]
-})
-export class MainApplication { }
-
-
-export const app = buildApp(MainApplication)
 ```
 
 <br>
