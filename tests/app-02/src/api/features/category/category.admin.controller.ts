@@ -20,5 +20,15 @@ export class CategoryAdminController {
         }
     }
 
+    @Get()
+    public async getCategory(req: Request, res: Response, next: NextFunction) {
+        try {
+
+            return res.send({ category: "yoyo"});
+        } catch (error) {
+            return next(error);
+        }
+    }
+
 
 }

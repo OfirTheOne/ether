@@ -1,5 +1,3 @@
-import { MainApplication } from './app'
-import { buildApp } from '@o-galaxy/ether/common/build-app'
+export { MainApplication, app } from './app'
 
 
-export const app = buildApp(MainApplication)

@@ -4,6 +4,7 @@ import { Module } from '@o-galaxy/ether/core';
 import { AuthGuard } from './common/guards/auth.guard';
 import { CategoryAdminController } from './features/category/category.admin.controller';
 import { ProductAdminController } from './features/product/product.admin.controller';
+import { CategoryAdminModule } from './features/category/category.admin.module';
 
 ;
 
@@ -14,8 +15,10 @@ import { ProductAdminController } from './features/product/product.admin.control
         AuthGuard
     ],
     controllers: [
-        CategoryAdminController,
         ProductAdminController
+    ],
+    modules: [
+        CategoryAdminModule
     ]
 }) 
 export class AppModule { }

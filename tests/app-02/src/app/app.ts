@@ -9,6 +9,7 @@ import "reflect-metadata";
 import { AppModule} from '../api/app.module';
 import { Application, AppPipeline } from '@o-galaxy/ether/core';
 import { IAppPipeline } from '@o-galaxy/ether/models/app-pipeline';
+import { buildApp } from '@o-galaxy/ether/common/build-app';
 
 
 
@@ -82,3 +83,4 @@ class ErrorHandlerPipe implements IAppPipeline {
 })
 export class MainApplication { }
 
+export const app = buildApp(MainApplication)
