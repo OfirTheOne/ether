@@ -372,7 +372,7 @@ export class MainApplication { }
 
 const port = 3000;
 
-serve(App, port,() => {
+serve(MainApplication, port,() => {
     console.log(`App listening on the port ${port}`);
 });
 ```
